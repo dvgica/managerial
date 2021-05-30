@@ -122,7 +122,7 @@ Unlike the Twitter Util library, Managerial:
 Unlike Scala's [`Using`](https://www.scala-lang.org/api/2.13.3/scala/util/Using$.html), Managerial:
 - is available for Scala 2.12
 - can be used in `for` comprehensions, similar to Twitter Util's `Managed`
-- does not require constructing `Releaseable` type class instances for each resource
+- does not require constructing `Releaseable` type class instances for each resource that is not `AutoCloseable`
 
 #### cats-effect `Resource`
 
