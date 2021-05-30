@@ -89,7 +89,7 @@ object Managed {
     *
     * A type class instance for AutoCloseable is provided in codes.dvg.managerial.
     */
-  def apply[T](setup: => T)(implicit ev: Teardown[T]): Managed[T] =
+  def from[T](setup: => T)(implicit ev: Teardown[T]): Managed[T] =
     apply(setup)(ev.teardown(_))
 
   /** Creates a Managed instance that requires setup only

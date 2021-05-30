@@ -14,7 +14,7 @@ Managerial is available for Scala 2.12, 2.13, and 3.0. Add the following depende
 
 ### Usage
 
-`Managed[T]` instances are created via `Managed#apply` or `Managed#setup`. Additionally, arbitrary actions can be made into `Managed[Unit]` instances via various `Managed#eval` methods.
+`Managed[T]` instances are created via `Managed#apply`, `Managed#setup`, or `Managed#from`. Additionally, arbitrary actions can be made into `Managed[Unit]` instances via various `Managed#eval` methods.
 
 Multiple `Managed` instances are composed or stacked via `flatMap`, generally with a for comprehension.
 
@@ -44,9 +44,9 @@ object Main extends App {
     // create Managed[HealthCheckServer], which requires teardown
     healthCheckServer <- Managed(new HealthCheckServer(settings))(_.stop())
 
-    // If a type class instance for Teardown[T] can be found, there is no need to specify the teardown procedure.
+    // Managed#from expects a type class instance for Teardown[T], instead of having teardown specified explicitly.
     // codes.dvg.managerial provides Teardown[AutoCloseable].
-    apiServer <- Managed(new ApiServer(settings))
+    apiServer <- Managed.from(new ApiServer(settings))
 
     // once the ApiServer is started, the HealthCheckServer can show it's ready
     _ <- Managed.eval(healthCheckServer.markReady())(healthCheckServer.markUnready())
