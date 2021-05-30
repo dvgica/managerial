@@ -15,6 +15,8 @@ trait Managed[+T] { selfT =>
     finally r.teardown()
   }
 
+  def foreach(f: T => Unit): Unit = use(f)
+
   /** Build the Managed stack, and register a JVM shutdown hook to tear it down automatically.
     */
   def useUntilShutdown(): Unit = {
