@@ -1,6 +1,6 @@
 /.idea
 .DS_Store
-target
+**/target
 
 *.orig
 
@@ -13,5 +13,7 @@ target
 .metals
 .vscode
 .bloop
+.bsp
+**/metals.sbt
 
 Main.scala
