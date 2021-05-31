@@ -1,4 +1,4 @@
-package codes.dvg.managerial
+package ist.dvg.managerial
 
 import scala.util.Try
 import scala.util.Failure
@@ -89,7 +89,7 @@ object Managed {
   /** Creates a Managed instance that requires both setup and teardown.
     * The teardown procedure is provided by an instance of the Teardown type class.
     *
-    * A type class instance for AutoCloseable is provided in codes.dvg.managerial.
+    * A type class instance for AutoCloseable is provided in ist.dvg.managerial.
     */
   def from[T](setup: => T)(implicit ev: Teardown[T]): Managed[T] =
     apply(setup)(ev.teardown(_))

@@ -1,4 +1,4 @@
-package codes.dvg
+package ist.dvg
 
 package object managerial {
   implicit val autoCloseableTeardown: Teardown[AutoCloseable] = new Teardown[AutoCloseable] {
