@@ -1,4 +1,4 @@
-package codes.dvg.managerial
+package ist.dvg.managerial
 
 class ManagedTest extends munit.FunSuite {
   class TestResource {
