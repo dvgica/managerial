@@ -9,7 +9,9 @@ lazy val root = project
     name := "managerial",
     version := "0.1.0",
     scalaVersion := scala3Version,
-    crossScalaVersions := Seq(scala3Version, scala213Version, scala212Version),
     Compile / run / fork := true,
     libraryDependencies += "org.scalameta" %% "munit" % "0.7.26" % Test
   )
+
+ThisBuild / crossScalaVersions := Seq(scala3Version, scala213Version, scala212Version)
+ThisBuild / githubWorkflowPublishTargetBranches := Seq()
