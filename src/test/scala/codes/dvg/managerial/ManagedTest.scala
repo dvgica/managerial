@@ -24,6 +24,17 @@ class ManagedTest extends munit.FunSuite {
     assert(tr.tornDown)
   }
 
+  test("Managed.setup only does setup") {
+    val tr = new TestResource
+    val m = Managed.setup(tr)
+
+    m.use { r =>
+      assertEquals(r, tr)
+    }
+
+    assert(!tr.tornDown)
+  }
+
   test("Composed Managed setup and teardown in the right order") {
     sealed trait Event
     case class Setup(resourceId: Int) extends Event
@@ -65,7 +76,7 @@ class ManagedTest extends munit.FunSuite {
     val m = Managed.from(ac)
 
     m.use { r =>
-      assertEquals(r.tornDown, false)
+      assert(!r.tornDown)
       assertEquals(r, ac)
     }
 
@@ -86,5 +97,130 @@ class ManagedTest extends munit.FunSuite {
     }
 
     assert(tr.tornDown)
+  }
+
+  test("Managed side-effects with eval") {
+    var setup = false
+    var teardown = false
+    val m = Managed.eval({ setup = true })({ teardown = true })
+
+    assert(!setup)
+    assert(!teardown)
+
+    val r = m.build()
+    assert(setup)
+    assert(!teardown)
+
+    r.teardown()
+    assert(setup)
+    assert(teardown)
+  }
+
+  test("Managed side-effects with evalSetup") {
+    var setup = false
+    var teardown = false
+    val m = Managed.evalSetup({ setup = true })
+
+    assert(!setup)
+    assert(!teardown)
+
+    val r = m.build()
+    assert(setup)
+    assert(!teardown)
+
+    r.teardown()
+    assert(setup)
+    assert(!teardown)
+  }
+
+  test("Managed side-effects with evalTeardown") {
+    var setup = false
+    var teardown = false
+    val m = Managed.evalTeardown({ teardown = true })
+
+    assert(!setup)
+    assert(!teardown)
+
+    val r = m.build()
+    assert(!setup)
+    assert(!teardown)
+
+    r.teardown()
+    assert(!setup)
+    assert(teardown)
+  }
+
+  test("An exception in the Managed setup stack causes previous Manageds to be torn down") {
+    val tr = new TestResource
+    val testException = new RuntimeException("test exception")
+    val m = for {
+      tr <- Managed(tr)(_.teardown())
+      er <- Managed.evalSetup(throw testException)
+    } yield er
+
+    assert(!tr.tornDown)
+
+    interceptMessage[RuntimeException](testException.getMessage) {
+      m.build()
+    }
+
+    assert(tr.tornDown)
+  }
+
+  test(
+    "An exception in the Managed teardown stack doesn't stop other Manageds from being torn down"
+  ) {
+    val tr = new TestResource
+    val testException = new RuntimeException("test exception")
+    val m = for {
+      tr <- Managed(tr)(_.teardown())
+      er <- Managed.evalTeardown(throw testException)
+    } yield er
+
+    assert(!tr.tornDown)
+
+    val r = m.build()
+
+    assert(!tr.tornDown)
+
+    interceptMessage[RuntimeException](testException.getMessage) {
+      r.teardown()
+    }
+
+    assert(tr.tornDown)
+  }
+
+  test(
+    "Multiple exceptions in the Managed teardown stack are surfaced"
+  ) {
+    val tr1 = new TestResource
+    val tr2 = new TestResource
+
+    val testException1 = new RuntimeException("test exception 1")
+    val testException2 = new RuntimeException("test exception 2")
+
+    val m = for {
+      tr1 <- Managed(tr1)(_.teardown())
+      er1 <- Managed.evalTeardown(throw testException1)
+      tr2 <- Managed(tr2)(_.teardown())
+      er2 <- Managed.evalTeardown(throw testException2)
+    } yield er2
+
+    assert(!tr1.tornDown)
+    assert(!tr2.tornDown)
+
+    val r = m.build()
+
+    assert(!tr1.tornDown)
+    assert(!tr2.tornDown)
+
+    val expectedMessage =
+      s"Double exception while tearing down composite resource: ${testException2.getMessage}, ${testException1.getMessage}"
+    interceptMessage[TeardownDoubleException](expectedMessage) {
+      r.teardown()
+    }
+
+    assert(tr1.tornDown)
+    assert(tr2.tornDown)
   }
 }

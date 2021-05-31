@@ -48,7 +48,7 @@ trait Managed[+T] { selfT =>
           case Failure(outer) =>
             Try(t.teardown()) match {
               case Success(_)     => throw outer
-              case Failure(inner) => throw new DoubleTrouble(outer, inner)
+              case Failure(inner) => throw new TeardownDoubleException(outer, inner)
             }
         }
       }
@@ -112,10 +112,10 @@ object Managed {
     apply(setupRun)(_ => teardownRun)
 }
 
-class DoubleTrouble(cause1: Throwable, cause2: Throwable) extends Exception {
+class TeardownDoubleException(cause1: Throwable, cause2: Throwable) extends Exception {
   override def getStackTrace: Array[StackTraceElement] = cause1.getStackTrace
   override def getMessage: String =
-    "Double failure while disposing composite resource: %s \n %s".format(
+    "Double exception while tearing down composite resource: %s, %s".format(
       cause1.getMessage,
       cause2.getMessage
     )
