@@ -8,7 +8,11 @@ Building a program (especially with manual dependency injection) often requires 
 
 ### Installation
 
-Managerial is available for Scala 2.12, 2.13, and 3.0. Add the following dependency description to your build.sbt:
+Managerial is available for Scala 2.12, 2.13, and 3.0.
+
+NOTE: publishing is WIP, and artifacts are not available yet!
+
+Add the following dependency description to your build.sbt:
 
 `"codes.dvg" %% "managerial" % "0.1.0"`
 
