@@ -1,4 +1,4 @@
-package ist.dvg.managerial
+package ca.dvgi.managerial
 
 trait Resource[+T] {
   def get: T
