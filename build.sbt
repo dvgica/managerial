@@ -1,3 +1,19 @@
+inThisBuild(
+  List(
+    organization := "ca.dvgi",
+    homepage := Some(url("https://github.com/dvgica/managerial")),
+    licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
+    developers := List(
+      Developer(
+        "dvgica",
+        "David van Geest",
+        "david.vangeest@gmail.com",
+        url("http://dvgi.ca")
+      )
+    )
+  )
+)
+
 val scala212Version = "2.12.14"
 val scala213Version = "2.13.6"
 val scala3Version = "3.0.0"
@@ -8,7 +24,6 @@ lazy val root = project
   .settings(
     organization := "ca.dvgi",
     name := "managerial",
-    version := "0.1.0",
     scalaVersion := scala3Version,
     crossScalaVersions := scalaVersions,
     Compile / run / fork := true,
@@ -16,4 +31,18 @@ lazy val root = project
   )
 
 ThisBuild / crossScalaVersions := scalaVersions
-ThisBuild / githubWorkflowPublishTargetBranches := Seq()
+ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
+ThisBuild / githubWorkflowPublishTargetBranches +=
+  RefPredicate.StartsWith(Ref.Tag("v"))
+
+ThisBuild / githubWorkflowPublish := Seq(
+  WorkflowStep.Sbt(
+    List("ci-release"),
+    env = Map(
+      "PGP_PASSPHRASE" -> "${{ secrets.PGP_PASSPHRASE }}",
+      "PGP_SECRET" -> "${{ secrets.PGP_SECRET }}",
+      "SONATYPE_PASSWORD" -> "${{ secrets.SONATYPE_PASSWORD }}",
+      "SONATYPE_USERNAME" -> "${{ secrets.SONATYPE_USERNAME }}"
+    )
+  )
+)
