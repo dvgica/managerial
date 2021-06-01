@@ -6,7 +6,7 @@ val scalaVersions = Seq(scala3Version, scala213Version, scala212Version)
 lazy val root = project
   .in(file("."))
   .settings(
-    organization := "ist.dvg",
+    organization := "ca.dvgi",
     name := "managerial",
     version := "0.1.0",
     scalaVersion := scala3Version,

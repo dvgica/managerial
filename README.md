@@ -14,7 +14,7 @@ NOTE: publishing is WIP, and artifacts are not available yet!
 
 Add the following dependency description to your build.sbt:
 
-`"ist.dvg" %% "managerial" % "0.1.0"`
+`"ca.dvgi" %% "managerial" % "0.1.0"`
 
 ### Usage
 
@@ -33,8 +33,8 @@ For more details, see the Scaladocs.
 For the impatient, here's a full-fledged example:
 
 ``` scala
-import ist.dvg.managerial.Managed
-import ist.dvg.managerial._
+import ca.dvgi.managerial.Managed
+import ca.dvgi.managerial._
 
 object Main extends App {
 
@@ -49,7 +49,7 @@ object Main extends App {
     healthCheckServer <- Managed(new HealthCheckServer(settings))(_.stop())
 
     // Managed#from expects a type class instance for Teardown[T], instead of having teardown specified explicitly.
-    // ist.dvg.managerial provides Teardown[AutoCloseable].
+    // ca.dvgi.managerial provides Teardown[AutoCloseable].
     apiServer <- Managed.from(new ApiServer(settings))
 
     // once the ApiServer is started, the HealthCheckServer can show it's ready

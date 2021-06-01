@@ -1,4 +1,4 @@
-package ist.dvg.managerial
+package ca.dvgi.managerial
 
 class ResourceTest extends munit.FunSuite {
   test("A const Resource does very little") {
