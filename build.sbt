@@ -10,8 +10,7 @@ inThisBuild(
         "david.vangeest@gmail.com",
         url("http://dvgi.ca")
       )
-    ),
-    sonatypeCredentialHost := "s01.oss.sonatype.org"
+    )
   )
 )
 
@@ -27,7 +26,9 @@ lazy val root = project
     scalaVersion := scala3Version,
     crossScalaVersions := scalaVersions,
     Compile / run / fork := true,
-    libraryDependencies += "org.scalameta" %% "munit" % "0.7.26" % Test
+    libraryDependencies += "org.scalameta" %% "munit" % "0.7.26" % Test,
+    sonatypeCredentialHost := "s01.oss.sonatype.org",
+    sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
   )
 
 ThisBuild / crossScalaVersions := scalaVersions
