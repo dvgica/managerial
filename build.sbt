@@ -31,6 +31,12 @@ lazy val root = project
   )
 
 ThisBuild / crossScalaVersions := scalaVersions
+ThisBuild / githubWorkflowBuildPreamble := Seq(
+  WorkflowStep.Sbt(
+    List("scalafmtCheckAll", "scalafmtSbtCheck"),
+    name = Some("Check formatting with scalafmt")
+  )
+)
 ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
 ThisBuild / githubWorkflowPublishTargetBranches +=
   RefPredicate.StartsWith(Ref.Tag("v"))
