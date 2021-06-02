@@ -10,7 +10,8 @@ inThisBuild(
         "david.vangeest@gmail.com",
         url("http://dvgi.ca")
       )
-    )
+    ),
+    sonatypeCredentialHost := "s01.oss.sonatype.org"
   )
 )
 
