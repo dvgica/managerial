@@ -22,7 +22,6 @@ val scalaVersions = Seq(scala3Version, scala213Version, scala212Version)
 lazy val root = project
   .in(file("."))
   .settings(
-    organization := "ca.dvgi",
     name := "managerial",
     scalaVersion := scala3Version,
     crossScalaVersions := scalaVersions,
