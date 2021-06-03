@@ -1,4 +1,5 @@
-## Managerial
+## Managerial 
+![Maven](https://img.shields.io/maven-central/v/ca.dvgi/managerial_3?color=blue) ![CI](https://img.shields.io/github/workflow/status/dvgica/managerial/Continuous%20Integration)
 
 Managerial is a small, dependency-free library providing `Managed`, a composable type for setting up and tearing down `Resource`s.
 
@@ -12,7 +13,7 @@ Managerial is available on Maven Central for Scala 2.12, 2.13, and 3.0.
 
 Add the following dependency description to your build.sbt:
 
-`"ca.dvgi" %% "managerial" % "0.1.0"`
+`"ca.dvgi" %% "managerial" % "<latest>"`
 
 ### Usage
 
