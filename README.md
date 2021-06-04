@@ -1,4 +1,4 @@
-# Managerial 
+# Managerial
 ![Maven](https://img.shields.io/maven-central/v/ca.dvgi/managerial_3?color=blue) ![CI](https://img.shields.io/github/workflow/status/dvgica/managerial/Continuous%20Integration)
 
 Managerial is a small, dependency-free library providing `Managed`, a composable type for setting up and tearing down `Resource`s.
@@ -50,7 +50,6 @@ For more details, see the Scaladocs.
 
 `file.txt` will be automatically closed after `use`, regardless of exceptions thrown.
 ``` scala
-import ca.dvgi.managerial.Managed
 import ca.dvgi.managerial._
 val fileContents = Managed.from(scala.io.Source.fromFile("file.txt")).use(_.mkString)
 ```
@@ -60,7 +59,6 @@ val fileContents = Managed.from(scala.io.Source.fromFile("file.txt")).use(_.mkSt
 This is a more full-featured example, showing Managerial's typical use-case.
 
 ``` scala
-import ca.dvgi.managerial.Managed
 import ca.dvgi.managerial._
 
 object Main extends App {
