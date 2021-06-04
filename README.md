@@ -1,9 +1,21 @@
-## Managerial 
+# Managerial 
 ![Maven](https://img.shields.io/maven-central/v/ca.dvgi/managerial_3?color=blue) ![CI](https://img.shields.io/github/workflow/status/dvgica/managerial/Continuous%20Integration)
 
 Managerial is a small, dependency-free library providing `Managed`, a composable type for setting up and tearing down `Resource`s.
 
-### Motivation
+- [Motivation](#motivation)
+- [Installation](#installation)
+- [Usage](#usage)
+  * [Basic Automatic Resource Management Example](#basic-automatic-resource-management-example)
+  * [Composed Resources Example](#composed-resources-example)
+- [Related Libraries](#related-libraries)
+  * [Twitter Util's `Managed`](#twitter-util-s--managed-)
+  * [Scala ARM](#scala-arm)
+  * [Scala Stdlib `Using`](#scala-stdlib--using-)
+  * [cats-effect `Resource`](#cats-effect--resource-)
+- [Contributing](#contributing)
+
+## Motivation
 
 This library can aid with basic automatic resource management, that is, automatically closing or tearing down resources once they have been used, regardless of exceptions. In this way, it is similar to Scala's `Using`, Java's `try-with-resources`, etc. This is not very exciting, but perhaps useful in some circumstances.
 
@@ -11,7 +23,7 @@ Where Managerial really shines is constructing a program in your `main` method. 
 
 None of the ideas in the lib are particularly novel (see [Related Libraries](#related-libraries)). But, some may find this particular combination of features enticing.
 
-### Installation
+## Installation
 
 Managerial is available on Maven Central for Scala 2.12, 2.13, and 3.0.
 
@@ -19,7 +31,7 @@ Add the following dependency description to your build.sbt:
 
 `"ca.dvgi" %% "managerial" % "<latest>"`
 
-### Usage
+## Usage
 
 `Managed[T]` instances are created via `Managed#apply`, `Managed#setup`, or `Managed#from`. Additionally, arbitrary actions can be made into `Managed[Unit]` instances via various `Managed#eval` methods.
 
@@ -124,9 +136,9 @@ Finished teardown
 ```
 
 
-### Related Libraries
+## Related Libraries
 
-#### Twitter Util's `Managed`
+### Twitter Util's `Managed`
 
 Managerial is very similar in style to Twitter Util's [`Managed`](https://twitter.github.io/util/docs/com/twitter/util/Managed.html), and borrows a lot of code from it.
 
@@ -136,7 +148,7 @@ Unlike the Twitter Util library, Managerial:
 - attempts to expose a better API for constructing instances of `Managed`
 - works with `AutoCloseable` out-of-the-box
 
-#### Scala ARM
+### Scala ARM
 
 Managerial is also quite similar to [Scala ARM](https://github.com/jsuereth/scala-arm).
 
@@ -144,19 +156,19 @@ Unlike Scala ARM, Managerial:
 - is (officially) published for Scala 2.13 and 3
 - lacks some of the "fancy" features, like Delimited Continuation style, reflection-based teardown, or JTA transaction support
 
-#### Scala Stdlib `Using`
+### Scala Stdlib `Using`
 
 Unlike Scala's [`Using`](https://www.scala-lang.org/api/2.13.3/scala/util/Using$.html), Managerial:
 - is available for Scala 2.12
 - can be used in `for` comprehensions, similar to Twitter Util's `Managed`
 - does not require constructing `Releaseable` type class instances for each resource that is not `AutoCloseable`
 
-#### cats-effect `Resource`
+### cats-effect `Resource`
 
-Unlike cats-effect's `Resource`, Managerial:
+Unlike cats-effect's [`Resource`](https://typelevel.org/cats-effect/docs/std/resource), Managerial:
 - does not have any dependencies apart from the Scala stdlib
 - does not abstract over effects (you may actually want that, in which case `cats-effect` is a better choice)
 
-### Contributing
+## Contributing
 
 Contributions in the form of Issues and PRs are welcome.
