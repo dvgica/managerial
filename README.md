@@ -75,14 +75,14 @@ object Main extends App {
 
     // Managed#from expects a type class instance for Teardown[T], instead of having teardown specified explicitly.
     // ca.dvgi.managerial provides Teardown[AutoCloseable].
-    apiServer <- Managed.from(new ApiServer(settings))
+    _ <- Managed.from(new ApiServer(settings))
 
     // once the ApiServer is started, the HealthCheckServer can show it's ready
     _ <- Managed.eval(healthCheckServer.markReady())(healthCheckServer.markUnready())
 
     // evalSetup and evalTeardown allow for side-effects during only setup or only teardown
     _ <- Managed.evalSetup(println("Startup is finished!"))
-  } yield apiServer
+  } yield ()
 
   // builds the Managed stack and registers a JVM shutdown hook to do automatic teardown
   server.useUntilShutdown()
