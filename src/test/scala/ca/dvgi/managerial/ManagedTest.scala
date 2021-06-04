@@ -223,4 +223,61 @@ class ManagedTest extends munit.FunSuite {
     assert(tr1.tornDown)
     assert(tr2.tornDown)
   }
+
+  test("Managed map returns a new Managed") {
+    val tr = new TestResource
+    val m = Managed(tr)(_.teardown())
+
+    val i = 42
+    val newM = m.map { r =>
+      assert(!r.tornDown)
+      i
+    }
+    assert(!tr.tornDown)
+    val r = newM.build()
+    assert(!tr.tornDown)
+    assertEquals(r.get, i)
+    r.teardown()
+    assert(tr.tornDown)
+  }
+
+  test("Exceptions during use trigger automatic teardown") {
+    val tr = new TestResource
+    val m = Managed(tr)(_.teardown())
+    val e = new RuntimeException("test exception")
+    interceptMessage[RuntimeException](e.getMessage) {
+      m.use(_ => throw e)
+    }
+    assert(tr.tornDown)
+  }
+
+  test("Exceptions during use trigger automatic teardown, suppressing exceptions during teardown") {
+    val tr1 = new TestResource
+    val eTeardown1 = new RuntimeException("test teardown exception 1")
+    val m1 = Managed(tr1)(_ => throw eTeardown1)
+    val tr2 = new TestResource
+    val eTeardown2 = new RuntimeException("test teardown exception 2")
+    val m2 = Managed(tr2)(_ => throw eTeardown2)
+
+    val m = m1.flatMap(_ => m2)
+
+    val e = new RuntimeException("test exception")
+    try {
+      m.use(_ => throw e)
+    } catch {
+      case t: RuntimeException =>
+        assertEquals(t.getMessage, e.getMessage)
+        assertEquals(t.getSuppressed.size, 1)
+        t.getSuppressed()(0) match {
+          case te: TeardownDoubleException =>
+            assertEquals(
+              te.getMessage,
+              s"Double exception while tearing down composite resource: ${eTeardown2.getMessage}, ${eTeardown1.getMessage}"
+            )
+        }
+      case _: Throwable => fail("Unexpected exception")
+    }
+    assert(!tr1.tornDown)
+    assert(!tr2.tornDown)
+  }
 }

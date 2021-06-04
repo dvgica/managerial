@@ -19,8 +19,21 @@ trait Managed[+T] { selfT =>
     */
   def use(f: T => Unit): Unit = {
     val r = this.build()
+    var toThrow: Throwable = null
     try f(r.get)
-    finally r.teardown()
+    catch {
+      case t: Throwable =>
+        toThrow = t
+    } finally {
+      try {
+        r.teardown()
+      } catch {
+        case t: Throwable =>
+          if (toThrow == null) toThrow = t
+          else toThrow.addSuppressed(t)
+      }
+      if (toThrow != null) throw toThrow
+    }
   }
 
   /** Alias for [[Managed.use]].
