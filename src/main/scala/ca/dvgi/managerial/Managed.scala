@@ -42,10 +42,26 @@ trait Managed[+T] { selfT =>
   def foreach(f: T => Unit): Unit = use(f)
 
   /** Build the [[Managed]] stack, and register a JVM shutdown hook to tear it down automatically.
+    *
+    * Optionally specify `onSetupException` or `onTeardownException` to handle exceptions
+    * on setup or teardown. By default, exceptions on setup or teardown are thrown.
     */
-  def useUntilShutdown(): Unit = {
-    val r = this.build()
-    sys.addShutdownHook(r.teardown())
+  def useUntilShutdown(
+      onSetupException: PartialFunction[Throwable, Unit] = { case t: Throwable => throw t },
+      onTeardownException: PartialFunction[Throwable, Unit] = { case t: Throwable => throw t }
+  ): Unit = {
+    var r: Resource[T] = null
+
+    try {
+      r = this.build()
+    } catch (onSetupException)
+
+    if (r != null) {
+      sys.addShutdownHook {
+        try r.teardown()
+        catch (onTeardownException)
+      }
+    }
   }
 
   /** Compose a new [[Managed]] instance that depends on `this` managed resource
