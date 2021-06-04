@@ -5,7 +5,11 @@ Managerial is a small, dependency-free library providing `Managed`, a composable
 
 ### Motivation
 
-Building a program (especially with manual dependency injection) often requires setup and teardown of various resources which may depend on each other. Doing this manually is tedious and error-prone; in particular, developers can easily forget to tear down a resource, or may tear down resources in a different order than they were setup. Managerial makes these errors impossible.
+This library can aid with basic automatic resource management, that is, automatically closing or tearing down resources once they have been used, regardless of exceptions. In this way, it is similar to Scala's `Using`, Java's `try-with-resources`, etc. This is not very exciting, but perhaps useful in some circumstances.
+
+Where Managerial really shines is constructing a program in your `main` method. Building a program (especially with manual dependency injection) often requires setup and teardown of various resources which may depend on each other. It's also often useful to have side-effects (e.g. logging) interspersed in this setup and teardown. Doing this construction manually is tedious and error-prone; in particular, developers can easily forget to tear down a resource, or may tear down resources in a different order than they were setup. Managerial makes these errors impossible by allowing for composition of `Managed` resources in a monadic style (i.e. for comprehensions, `flatMap`, `map`).
+
+None of the ideas in the lib are particularly novel (see [Related Libraries](#related-libraries)). But, some may find this particular combination of features enticing.
 
 ### Installation
 
@@ -23,13 +27,25 @@ Multiple `Managed` instances are composed or stacked via `flatMap`, generally wi
 
 Once the `Managed` stack is composed, the underlying resources are built and used with `use` or `useUntilShutdown`. Setup occurs in the order of the for comprehension or `flatMap`s, and teardown happens in the reverse order.
 
-Exceptions during setup are thrown after already-built resources are torn down. Exceptions during teardown are thrown, but only after teardown is called on every resource.
+Exception behavior is as follows:
+- Exceptions during setup are thrown after already-built resources are torn down
+- Exceptions during usage are thrown after resources are torn down
+- Exceptions during teardown are thrown, but only after teardown is called on every resource. If an exception was thrown during usage, the teardown exceptions are added as suppressed exceptions on the usage exception.
 
 For more details, see the Scaladocs.
 
-### Example
+### Basic Automatic Resource Management Example
 
-For the impatient, here's a full-fledged example:
+`file.txt` will be automatically closed after `use`, regardless of exceptions thrown.
+``` scala
+import ca.dvgi.managerial.Managed
+import ca.dvgi.managerial._
+val fileContents = Managed.from(scala.io.Source.fromFile("file.txt")).use(_.mkString)
+```
+
+### Composed Resources Example
+
+This is a more full-featured example, showing Managerial's typical use-case.
 
 ``` scala
 import ca.dvgi.managerial.Managed
@@ -119,6 +135,14 @@ Unlike the Twitter Util library, Managerial:
 - does not allow for asynchronous resource disposal/release
 - attempts to expose a better API for constructing instances of `Managed`
 - works with `AutoCloseable` out-of-the-box
+
+#### Scala ARM
+
+Managerial is also quite similar to [Scala ARM](https://github.com/jsuereth/scala-arm).
+
+Unlike Scala ARM, Managerial:
+- is (officially) published for Scala 2.13 and 3
+- lacks some of the "fancy" features, like Delimited Continuation style, reflection-based teardown, or JTA transaction support
 
 #### Scala Stdlib `Using`
 

@@ -17,13 +17,14 @@ trait Managed[+T] { selfT =>
   /** Build the [[Managed]] stack, get the resulting Resource's T, and pass it to the given function.
     * After the function completes, the resource is torn down.
     */
-  def use(f: T => Unit): Unit = {
+  def use[R](f: T => R): R = {
     val r = this.build()
     var toThrow: Throwable = null
     try f(r.get)
     catch {
       case t: Throwable =>
         toThrow = t
+        null.asInstanceOf[R] // compiler doesn't know that finally will throw
     } finally {
       try {
         r.teardown()
@@ -36,7 +37,7 @@ trait Managed[+T] { selfT =>
     }
   }
 
-  /** Alias for [[Managed.use]].
+  /** Same as [[Managed.use]], but specifically for side-effects (Unit is returned).
     */
   def foreach(f: T => Unit): Unit = use(f)
 
