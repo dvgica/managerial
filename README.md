@@ -1,5 +1,5 @@
 # Managerial
-![Maven](https://img.shields.io/maven-central/v/ca.dvgi/managerial_3?color=blue) ![CI](https://img.shields.io/github/workflow/status/dvgica/managerial/Continuous%20Integration)
+[![Maven](https://img.shields.io/maven-central/v/ca.dvgi/managerial_3?color=blue)](https://search.maven.org/search?q=g:ca.dvgi%20managerial) [![CI](https://img.shields.io/github/workflow/status/dvgica/managerial/Continuous%20Integration)](https://github.com/dvgica/managerial/actions)
 
 Managerial is a small, dependency-free library providing `Managed`, a composable type for setting up and tearing down `Resource`s.
 
