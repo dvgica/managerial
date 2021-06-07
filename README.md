@@ -160,6 +160,7 @@ Unlike Scala's [`Using`](https://www.scala-lang.org/api/2.13.3/scala/util/Using$
 - is available for Scala 2.12
 - can be used in `for` comprehensions, similar to Twitter Util's `Managed`
 - does not require constructing `Releaseable` type class instances for each resource that is not `AutoCloseable`
+- allows for easily encoding side-effects into teardown (e.g. `adminServer.markUnready()` in the above [example](#composed-resources-example))
 
 ### cats-effect `Resource`
 
