@@ -16,19 +16,44 @@ inThisBuild(
 
 val scala212Version = "2.12.14"
 val scala213Version = "2.13.6"
-val scala3Version = "3.0.1"
-val scalaVersions = Seq(scala3Version, scala213Version, scala212Version)
+val scalaVersions =
+  Seq(
+    scala213Version,
+    scala212Version
+  )
+
+def subproject(name: String) = Project(
+  id = name,
+  base = file(name)
+).settings(
+  scalaVersion := scala213Version,
+  libraryDependencies += "org.scalameta" %% "munit" % "0.7.26" % Test,
+  sonatypeCredentialHost := "s01.oss.sonatype.org",
+  sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
+)
+
+lazy val managerial =
+  subproject("managerial")
+    .settings(
+      crossScalaVersions := scalaVersions
+    )
+
+lazy val managerialTwitterUtil =
+  subproject("managerial-twitter-util")
+    .dependsOn(managerial)
+    .settings(
+      crossScalaVersions := Seq(scala213Version, scala212Version),
+      libraryDependencies += "com.twitter" %% "util-core" % "21.5.0" % Provided
+    )
 
 lazy val root = project
   .in(file("."))
+  .aggregate(
+    managerial,
+    managerialTwitterUtil
+  )
   .settings(
-    name := "managerial",
-    scalaVersion := scala3Version,
-    crossScalaVersions := scalaVersions,
-    Compile / run / fork := true,
-    libraryDependencies += "org.scalameta" %% "munit" % "0.7.27" % Test,
-    sonatypeCredentialHost := "s01.oss.sonatype.org",
-    sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
+    publish / skip := true
   )
 
 ThisBuild / crossScalaVersions := scalaVersions
