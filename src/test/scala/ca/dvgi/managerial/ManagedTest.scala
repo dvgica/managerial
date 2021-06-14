@@ -50,7 +50,7 @@ class ManagedTest extends munit.FunSuite {
     }
 
     val m = for {
-      m1 <- Managed(new EventedTestResource(1))(_.teardown())
+      _ <- Managed(new EventedTestResource(1))(_.teardown())
       m2 <- Managed(new EventedTestResource(2))(_.teardown())
     } yield m2
 
@@ -118,35 +118,27 @@ class ManagedTest extends munit.FunSuite {
 
   test("Managed side-effects with evalSetup") {
     var setup = false
-    var teardown = false
     val m = Managed.evalSetup({ setup = true })
 
     assert(!setup)
-    assert(!teardown)
 
     val r = m.build()
     assert(setup)
-    assert(!teardown)
 
     r.teardown()
     assert(setup)
-    assert(!teardown)
   }
 
   test("Managed side-effects with evalTeardown") {
-    var setup = false
     var teardown = false
     val m = Managed.evalTeardown({ teardown = true })
 
-    assert(!setup)
     assert(!teardown)
 
     val r = m.build()
-    assert(!setup)
     assert(!teardown)
 
     r.teardown()
-    assert(!setup)
     assert(teardown)
   }
 
@@ -154,7 +146,7 @@ class ManagedTest extends munit.FunSuite {
     val tr = new TestResource
     val testException = new RuntimeException("test exception")
     val m = for {
-      tr <- Managed(tr)(_.teardown())
+      _ <- Managed(tr)(_.teardown())
       er <- Managed.evalSetup(throw testException)
     } yield er
 
@@ -173,7 +165,7 @@ class ManagedTest extends munit.FunSuite {
     val tr = new TestResource
     val testException = new RuntimeException("test exception")
     val m = for {
-      tr <- Managed(tr)(_.teardown())
+      _ <- Managed(tr)(_.teardown())
       er <- Managed.evalTeardown(throw testException)
     } yield er
 
@@ -200,9 +192,9 @@ class ManagedTest extends munit.FunSuite {
     val testException2 = new RuntimeException("test exception 2")
 
     val m = for {
-      tr1 <- Managed(tr1)(_.teardown())
-      er1 <- Managed.evalTeardown(throw testException1)
-      tr2 <- Managed(tr2)(_.teardown())
+      _ <- Managed(tr1)(_.teardown())
+      _ <- Managed.evalTeardown(throw testException1)
+      _ <- Managed(tr2)(_.teardown())
       er2 <- Managed.evalTeardown(throw testException2)
     } yield er2
 
@@ -274,6 +266,7 @@ class ManagedTest extends munit.FunSuite {
               te.getMessage,
               s"Double exception while tearing down composite resource: ${eTeardown2.getMessage}, ${eTeardown1.getMessage}"
             )
+          case e => fail("Unexpected exception", e)
         }
       case _: Throwable => fail("Unexpected exception")
     }
