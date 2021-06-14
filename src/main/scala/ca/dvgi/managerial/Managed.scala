@@ -61,6 +61,7 @@ trait Managed[+T] { selfT =>
         try r.teardown()
         catch (onTeardownException)
       }
+      ()
     }
   }
 
