@@ -151,7 +151,7 @@ Unlike the Twitter Util library, Managerial:
 Managerial is also quite similar to [Scala ARM](https://github.com/jsuereth/scala-arm).
 
 Unlike Scala ARM, Managerial:
-- is (officially) published for Scala 2.13 and 3
+- is (officially) published for Scala 2.13 and 3.0
 - lacks some of the "fancy" features, like Delimited Continuation style, reflection-based teardown, or JTA transaction support
 
 ### Scala Stdlib `Using`
