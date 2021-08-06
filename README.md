@@ -25,7 +25,9 @@ None of the ideas in the lib are particularly novel (see [Related Libraries](#re
 
 ## Installation
 
-Managerial is available on Maven Central for Scala 2.12 and 2.13.
+Managerial is available on Maven Central for Scala 2.12 and 2.13. There are two artifacts:
+- `managerial`, which provides core functionality
+- `managerial-twitter-util`, which provides [compatibility](#compatibility-with-twitter-util-managed) with Twitter Util's `Managed`
 
 Add the following dependency description to your build.sbt:
 
@@ -139,6 +141,11 @@ Stopped HealthCheckServer
 Finished teardown
 ```
 
+### Compatibility with Twitter Util `Managed`
+
+The `managerial-twitter-util` artifact provides `asManagerial` for `com.twitter.util.Managed`, and `asTwitterUtil` for `ca.dvgi.managerial.Managed`.
+
+Import `ca.dvgi.managerial.twitter.util._` to use these methods.
 
 ## Related Libraries
 
