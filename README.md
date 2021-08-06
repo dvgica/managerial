@@ -25,11 +25,17 @@ None of the ideas in the lib are particularly novel (see [Related Libraries](#re
 
 ## Installation
 
-Managerial is available on Maven Central for Scala 2.12, 2.13, and 3.0.
+Managerial is available on Maven Central for Scala 2.12 and 2.13.
 
 Add the following dependency description to your build.sbt:
 
 `"ca.dvgi" %% "managerial" % "<latest>"`
+
+For usage from a Scala 3 project, use:
+
+`("ca.dvgi" %% "managerial" % "<latest>").cross(CrossVersion.for3Use2_13)`
+
+as detailed in the [Scala 3 Migration Guide](https://docs.scala-lang.org/scala3/guides/migration/compatibility-classpath.html).
 
 ## Usage
 
@@ -151,7 +157,7 @@ Unlike the Twitter Util library, Managerial:
 Managerial is also quite similar to [Scala ARM](https://github.com/jsuereth/scala-arm).
 
 Unlike Scala ARM, Managerial:
-- is (officially) published for Scala 2.13 and 3.0
+- is (officially) published for Scala 2.13 (and usable from 3.0)
 - lacks some of the "fancy" features, like Delimited Continuation style, reflection-based teardown, or JTA transaction support
 
 ### Scala Stdlib `Using`
