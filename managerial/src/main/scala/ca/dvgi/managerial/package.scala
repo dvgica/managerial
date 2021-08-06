@@ -67,7 +67,7 @@ package ca.dvgi
   */
 package object managerial {
 
-  /** A type class instance describing how to teardown a [[java.lang.AutoCloseable]]
+  /** A type class instance describing how to teardown a java.lang.AutoCloseable
     */
   implicit val autoCloseableTeardown: Teardown[AutoCloseable] = new Teardown[AutoCloseable] {
     def teardown(ac: AutoCloseable): Unit = ac.close()

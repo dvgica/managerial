@@ -137,7 +137,7 @@ object Managed {
   /** Creates a [[Managed]] instance that requires both setup and teardown.
     * The teardown procedure is provided by an instance of the [[Teardown]] type class.
     *
-    * A type class instance for [[java.lang.AutoCloseable]] is provided in [[ca.dvgi.managerial]].
+    * A type class instance for java.lang.AutoCloseable is provided in [[ca.dvgi.managerial]].
     */
   def from[T](setup: => T)(implicit ev: Teardown[T]): Managed[T] =
     apply(setup)(ev.teardown(_))
