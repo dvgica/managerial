@@ -27,22 +27,18 @@ def subproject(name: String) = Project(
   base = file(name)
 ).settings(
   scalaVersion := scala213Version,
+  crossScalaVersions := scalaVersions,
   libraryDependencies += "org.scalameta" %% "munit" % "0.7.26" % Test,
   sonatypeCredentialHost := "s01.oss.sonatype.org",
   sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
 )
 
-lazy val managerial =
-  subproject("managerial")
-    .settings(
-      crossScalaVersions := scalaVersions
-    )
+lazy val managerial = subproject("managerial")
 
 lazy val managerialTwitterUtil =
   subproject("managerial-twitter-util")
     .dependsOn(managerial)
     .settings(
-      crossScalaVersions := Seq(scala213Version, scala212Version),
       libraryDependencies += "com.twitter" %% "util-core" % "21.5.0" % Provided
     )
 
