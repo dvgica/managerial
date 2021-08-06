@@ -49,7 +49,9 @@ lazy val root = project
     managerialTwitterUtil
   )
   .settings(
-    publish / skip := true
+    publish / skip := true,
+    sonatypeCredentialHost := "s01.oss.sonatype.org",
+    sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
   )
 
 ThisBuild / crossScalaVersions := scalaVersions
