@@ -8,6 +8,7 @@ Managerial is a small, dependency-free library providing `Managed`, a composable
 - [Usage](#usage)
   * [Basic Automatic Resource Management Example](#basic-automatic-resource-management-example)
   * [Composed Resources Example](#composed-resources-example)
+  * [Compatibility with Twitter Util `Managed`](#compatibility-with-twitter-util-managed)
 - [Related Libraries](#related-libraries)
   * [Twitter Util's `Managed`](#twitter-util-s--managed-)
   * [Scala ARM](#scala-arm)
