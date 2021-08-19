@@ -8,14 +8,14 @@ import scala.util.Success
   *
   * Managed instances can be composed via [[Managed.flatMap]], generally in a for comprehension.
   *
-  * Once composition is complete, the underlying resources can be setup and accessed via [[Managed.use]]
-  * or [[Managed.useUntilShutdown]]. Both methods handle tearing down the setup resources once they are no longer needed.
-  * Teardown proceeds in the opposite order from setup.
+  * Once composition is complete, the underlying resources can be setup and accessed via
+  * [[Managed.use]] or [[Managed.useUntilShutdown]]. Both methods handle tearing down the setup
+  * resources once they are no longer needed. Teardown proceeds in the opposite order from setup.
   */
 trait Managed[+T] { selfT =>
 
-  /** Build the [[Managed]] stack, get the resulting Resource's T, and pass it to the given function.
-    * After the function completes, the resource is torn down.
+  /** Build the [[Managed]] stack, get the resulting Resource's T, and pass it to the given
+    * function. After the function completes, the resource is torn down.
     */
   def use[R](f: T => R): R = {
     val r = this.build()
@@ -43,8 +43,8 @@ trait Managed[+T] { selfT =>
 
   /** Build the [[Managed]] stack, and register a JVM shutdown hook to tear it down automatically.
     *
-    * Optionally specify `onSetupException` or `onTeardownException` to handle exceptions
-    * on setup or teardown. By default, exceptions on setup or teardown are thrown.
+    * Optionally specify `onSetupException` or `onTeardownException` to handle exceptions on setup
+    * or teardown. By default, exceptions on setup or teardown are thrown.
     */
   def useUntilShutdown(
       onSetupException: PartialFunction[Throwable, Unit] = { case t: Throwable => throw t },
@@ -100,11 +100,11 @@ trait Managed[+T] { selfT =>
     */
   def map[U](f: T => U): Managed[U] = flatMap { t => Managed.const(f(t)) }
 
-  /** Builds a Resource from this Managed,
-    * including any [[Managed]] instances that were previously composed with it.
+  /** Builds a Resource from this Managed, including any [[Managed]] instances that were previously
+    * composed with it.
     *
-    * If this method is used instead of [[Managed.use]], [[Resource.teardown]] should be invoked explicitly
-    * when the resource is no longer needed.
+    * If this method is used instead of [[Managed.use]], [[Resource.teardown]] should be invoked
+    * explicitly when the resource is no longer needed.
     */
   def build(): Resource[T]
 }
@@ -134,8 +134,8 @@ object Managed {
       }
     }
 
-  /** Creates a [[Managed]] instance that requires both setup and teardown.
-    * The teardown procedure is provided by an instance of the [[Teardown]] type class.
+  /** Creates a [[Managed]] instance that requires both setup and teardown. The teardown procedure
+    * is provided by an instance of the [[Teardown]] type class.
     *
     * A type class instance for java.lang.AutoCloseable is provided in [[ca.dvgi.managerial]].
     */
