@@ -1,7 +1,7 @@
 package ca.dvgi.managerial
 
-/** An exception wrapping two exceptions occuring during teardown. The wrapped exceptions may
-  * also be [[TeardownDoubleException]]s to support an arbitrary number of faiures.
+/** An exception wrapping two exceptions occuring during teardown. The wrapped exceptions may also
+  * be [[TeardownDoubleException]] s to support an arbitrary number of faiures.
   */
 class TeardownDoubleException(cause1: Throwable, cause2: Throwable) extends Exception {
   override def getStackTrace: Array[StackTraceElement] = cause1.getStackTrace
