@@ -84,11 +84,10 @@ trait Managed[+T] { selfT =>
               t.teardown()
             } catch {
               case throwable: Throwable =>
-                if (toThrow == null) toThrow = throwable
-                else toThrow.addSuppressed(throwable)
+                toThrow.addSuppressed(throwable)
             }
-            if (toThrow != null) throw toThrow
-            null.asInstanceOf[Resource[U]] // compiler doesn't know that getting here is impossible
+
+            throw toThrow
         }
 
       def get = u.get
