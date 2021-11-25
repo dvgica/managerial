@@ -71,23 +71,19 @@ trait Managed[+T] { selfT =>
     def build() = new Resource[U] {
       private val t = selfT.build()
 
-      private var toThrow: Throwable = null
-
       private val u =
         try {
           f(t.get).build()
         } catch {
-          case throwable: Throwable =>
-            toThrow = throwable
-
+          case setupThrowable: Throwable =>
             try {
               t.teardown()
             } catch {
-              case throwable: Throwable =>
-                toThrow.addSuppressed(throwable)
+              case teardownThrowable: Throwable =>
+                setupThrowable.addSuppressed(teardownThrowable)
             }
 
-            throw toThrow
+            throw setupThrowable
         }
 
       def get = u.get
