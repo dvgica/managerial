@@ -51,7 +51,9 @@ Once the `Managed` stack is composed, the underlying resources are built and use
 Exception behavior is as follows:
 - Exceptions during setup are thrown after already-built resources are torn down
 - Exceptions during usage are thrown after resources are torn down
-- Exceptions during teardown are thrown, but only after teardown is called on every resource. If an exception was thrown during usage, the teardown exceptions are added as suppressed exceptions on the usage exception.
+- Exceptions during teardown are thrown, but only after teardown is called on every resource. 
+- If an exception is thrown during usage, and an exception occurred during teardown, the usage exception is thrown with the teardown exception added as a suppressed exception.
+- If an exception is thrown during setup, and an exception occurred during teardown, the setup exception is thrown with the teardown exception added as a suppressed exception.
 
 For more details, see the Scaladocs.
 

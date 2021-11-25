@@ -281,4 +281,23 @@ class ManagedTest extends munit.FunSuite {
     assertEquals(r, i)
     assert(tr.tornDown)
   }
+
+  test(
+    "An exception in the Managed setup stack, followed by an exception in the teardown stack, surfaces the setup exception"
+  ) {
+    println("start")
+    val setupException = new RuntimeException("setup exception")
+    val teardownException = new RuntimeException("teardown exception")
+
+    val m = for {
+      _ <- Managed.evalTeardown(throw teardownException)
+      _ <- Managed.evalSetup(throw setupException)
+    } yield ()
+
+    interceptMessage[RuntimeException](setupException.getMessage) {
+      m.build()
+    }
+    println("end")
+
+  }
 }
