@@ -283,7 +283,7 @@ class ManagedTest extends munit.FunSuite {
   }
 
   test(
-    "An exception in the Managed setup stack, followed by an exception in the teardown stack, surfaces the setup exception"
+    "An exception in the Managed setup stack, followed by an exception in the teardown stack, surfaces the setup exception with a suppressed teardown exception"
   ) {
     val setupException = new RuntimeException("setup exception")
     val teardownException = new RuntimeException("teardown exception")
