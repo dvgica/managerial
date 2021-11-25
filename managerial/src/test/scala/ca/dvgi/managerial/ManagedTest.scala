@@ -293,8 +293,21 @@ class ManagedTest extends munit.FunSuite {
       _ <- Managed.evalSetup(throw setupException)
     } yield ()
 
-    interceptMessage[RuntimeException](setupException.getMessage) {
+    try {
       m.build()
+    } catch {
+      case t: RuntimeException =>
+        assertEquals(t.getMessage, setupException.getMessage)
+        assertEquals(t.getSuppressed.size, 1)
+        t.getSuppressed()(0) match {
+          case te: RuntimeException =>
+            assertEquals(
+              te.getMessage,
+              teardownException.getMessage
+            )
+          case e => fail("Unexpected exception", e)
+        }
+      case _: Throwable => fail("Unexpected exception")
     }
   }
 }
