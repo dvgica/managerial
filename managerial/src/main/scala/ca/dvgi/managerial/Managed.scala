@@ -69,15 +69,21 @@ trait Managed[+T] { selfT =>
     */
   def flatMap[U](f: T => Managed[U]): Managed[U] = new Managed[U] {
     def build() = new Resource[U] {
-      val t = selfT.build()
+      private val t = selfT.build()
 
-      val u =
+      private val u =
         try {
           f(t.get).build()
         } catch {
-          case e: Exception =>
-            t.teardown()
-            throw e
+          case setupThrowable: Throwable =>
+            try {
+              t.teardown()
+            } catch {
+              case teardownThrowable: Throwable =>
+                setupThrowable.addSuppressed(teardownThrowable)
+            }
+
+            throw setupThrowable
         }
 
       def get = u.get
