@@ -310,4 +310,72 @@ class ManagedTest extends munit.FunSuite {
       case _: Throwable => fail("Unexpected exception")
     }
   }
+
+  test("Managed.sequence") {
+    val tr1 = new TestResource
+    val tr2 = new TestResource
+    val tr3 = new TestResource
+
+    val trs =
+      Set(Managed(tr1)(_.teardown()), Managed(tr2)(_.teardown()), Managed(tr3)(_.teardown()))
+
+    val mtrs = Managed.sequence(trs)
+
+    assert(!tr1.tornDown)
+    assert(!tr2.tornDown)
+    assert(!tr3.tornDown)
+
+    val r = mtrs.build()
+
+    assert(!tr1.tornDown)
+    assert(!tr2.tornDown)
+    assert(!tr3.tornDown)
+    assertEquals(r.get, Set(tr1, tr2, tr3))
+
+    r.teardown()
+
+    assert(tr1.tornDown)
+    assert(tr2.tornDown)
+    assert(tr3.tornDown)
+  }
+
+  test("Managed.sequence exception in setup") {
+    val tr1 = new TestResource
+    val e = new RuntimeException("test")
+
+    val trs =
+      Set(Managed(tr1)(_.teardown()), Managed.evalSetup(throw e))
+
+    val mtrs = Managed.sequence(trs)
+
+    assert(!tr1.tornDown)
+
+    interceptMessage[RuntimeException](e.getMessage) {
+      mtrs.build()
+    }
+
+    assert(tr1.tornDown)
+  }
+
+  test("Managed.sequence exception in teardown") {
+    val tr1 = new TestResource
+    val e = new RuntimeException("test")
+
+    val trs =
+      List(Managed(tr1)(_.teardown()), Managed.evalTeardown(throw e))
+
+    val mtrs = Managed.sequence(trs)
+
+    assert(!tr1.tornDown)
+
+    val r = mtrs.build()
+    val expected: List[Any] = List(tr1, ())
+    assertEquals(r.get, expected)
+
+    interceptMessage[RuntimeException](e.getMessage) {
+      r.teardown()
+    }
+
+    assert(tr1.tornDown)
+  }
 }
