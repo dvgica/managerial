@@ -117,7 +117,7 @@ trait Managed[+T] { selfT =>
 
 /** Provides various methods for creating [[Managed]] instances.
   */
-object Managed {
+trait ManagedCompanionOps {
 
   /** Creates a [[Managed]] instance from an existing Resource
     */
@@ -164,4 +164,7 @@ object Managed {
     */
   def eval(setupRun: => Unit)(teardownRun: => Unit): Managed[Unit] =
     apply(setupRun)(_ => teardownRun)
+
 }
+
+object Managed extends CompatibleManagedCompanionOps
