@@ -50,10 +50,10 @@ Multiple `Managed` instances are composed or stacked via `flatMap`, generally wi
 
 Once the `Managed` stack is composed, the underlying resources are built and used with `use` or `useUntilShutdown`. Setup occurs in the order of the for comprehension or `flatMap`s, and teardown happens in the reverse order.
 
-Exception behavior is as follows:
+Non-fatal exceptions are handled as follows:
 - Exceptions during setup are thrown after already-built resources are torn down
 - Exceptions during usage are thrown after resources are torn down
-- Exceptions during teardown are thrown, but only after teardown is called on every resource. 
+- Exceptions during teardown are thrown, but only after teardown is called on every resource.
 - If an exception is thrown during usage, and an additional exception occurs during teardown, the usage exception is thrown with the teardown exception added as a suppressed exception.
 - If an exception is thrown during setup, and an additional exception occurs during teardown, the setup exception is thrown with the teardown exception added as a suppressed exception.
 
