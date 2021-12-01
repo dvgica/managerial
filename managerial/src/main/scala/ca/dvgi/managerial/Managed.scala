@@ -66,6 +66,10 @@ trait Managed[+T] { selfT =>
     }
   }
 
+  /** Build the [[Managed]] stack and immediately tear it down.
+    */
+  def run(): Unit = foreach(_ => ())
+
   /** Compose a new [[Managed]] instance that depends on `this` managed resource
     */
   def flatMap[U](f: T => Managed[U]): Managed[U] = new Managed[U] {
