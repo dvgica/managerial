@@ -3,6 +3,7 @@ package ca.dvgi.managerial
 import scala.util.Try
 import scala.util.Failure
 import scala.util.Success
+import scala.util.control.NonFatal
 
 /** An instance of Managed wraps a resource and manages its lifecycle.
   *
@@ -22,14 +23,14 @@ trait Managed[+T] { selfT =>
     var toThrow: Throwable = null
     try f(r.get)
     catch {
-      case t: Throwable =>
+      case NonFatal(t) =>
         toThrow = t
         null.asInstanceOf[R] // compiler doesn't know that finally will throw
     } finally {
       try {
         r.teardown()
       } catch {
-        case t: Throwable =>
+        case NonFatal(t) =>
           if (toThrow == null) toThrow = t
           else toThrow.addSuppressed(t)
       }
@@ -47,8 +48,8 @@ trait Managed[+T] { selfT =>
     * or teardown. By default, exceptions on setup or teardown are thrown.
     */
   def useUntilShutdown(
-      onSetupException: PartialFunction[Throwable, Unit] = { case t: Throwable => throw t },
-      onTeardownException: PartialFunction[Throwable, Unit] = { case t: Throwable => throw t }
+      onSetupException: PartialFunction[Throwable, Unit] = { case NonFatal(t) => throw t },
+      onTeardownException: PartialFunction[Throwable, Unit] = { case NonFatal(t) => throw t }
   ): Unit = {
     var r: Resource[T] = null
 
@@ -75,11 +76,11 @@ trait Managed[+T] { selfT =>
         try {
           f(t.get).build()
         } catch {
-          case setupThrowable: Throwable =>
+          case NonFatal(setupThrowable) =>
             try {
               t.teardown()
             } catch {
-              case teardownThrowable: Throwable =>
+              case NonFatal(teardownThrowable) =>
                 setupThrowable.addSuppressed(teardownThrowable)
             }
 
