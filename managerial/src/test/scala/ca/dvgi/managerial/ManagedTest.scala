@@ -378,4 +378,13 @@ class ManagedTest extends munit.FunSuite {
 
     assert(tr1.tornDown)
   }
+
+  test("Managed#run") {
+    val tr = new TestResource
+    val m = Managed(tr)(_.teardown())
+
+    assertEquals(m.run(), ())
+
+    assert(tr.tornDown)
+  }
 }
