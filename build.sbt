@@ -55,6 +55,7 @@ lazy val root = project
   )
 
 ThisBuild / crossScalaVersions := scalaVersions
+ThisBuild / githubWorkflowJavaVersions := Seq(JavaSpec.temurin("8"))
 ThisBuild / githubWorkflowBuildPreamble := Seq(
   WorkflowStep.Sbt(
     List("scalafmtCheckAll", "scalafmtSbtCheck"),
