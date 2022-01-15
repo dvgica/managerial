@@ -15,7 +15,7 @@ inThisBuild(
 )
 
 val scala212Version = "2.12.15"
-val scala213Version = "2.13.7"
+val scala213Version = "2.13.8"
 val scalaVersions =
   Seq(
     scala213Version,
