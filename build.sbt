@@ -39,7 +39,7 @@ lazy val managerialTwitterUtil =
   subproject("managerial-twitter-util")
     .dependsOn(managerial)
     .settings(
-      libraryDependencies += "com.twitter" %% "util-core" % "21.12.0" % Provided
+      libraryDependencies += "com.twitter" %% "util-core" % "22.1.0" % Provided
     )
 
 lazy val root = project
