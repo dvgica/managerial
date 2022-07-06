@@ -359,17 +359,18 @@ class ManagedTest extends munit.FunSuite {
 
   test("Managed.sequence exception in teardown") {
     val tr1 = new TestResource
+    val tr2 = new TestResource
     val e = new RuntimeException("test")
 
     val trs =
-      List(Managed(tr1)(_.teardown()), Managed.evalTeardown(throw e))
+      List(Managed(tr1)(_.teardown()), Managed(tr2)(_ => throw e))
 
     val mtrs = Managed.sequence(trs)
 
     assert(!tr1.tornDown)
 
     val r = mtrs.build()
-    val expected: List[Any] = List(tr1, ())
+    val expected = List(tr1, tr2)
     assertEquals(r.get, expected)
 
     interceptMessage[RuntimeException](e.getMessage) {

@@ -16,10 +16,12 @@ inThisBuild(
 
 val scala212Version = "2.12.16"
 val scala213Version = "2.13.8"
+val scala3Version = "3.0.2"
 val scalaVersions =
   Seq(
     scala213Version,
-    scala212Version
+    scala212Version,
+    scala3Version
   )
 
 def subproject(name: String) = Project(
@@ -39,7 +41,7 @@ lazy val managerialTwitterUtil =
   subproject("managerial-twitter-util")
     .dependsOn(managerial)
     .settings(
-      libraryDependencies += "com.twitter" %% "util-core" % "22.4.0" % Provided
+      libraryDependencies += "com.twitter" %% "util-core" % "22.4.0" % Provided exclude ("org.scala-lang.modules", "scala-collection-compat_3")
     )
 
 lazy val root = project
@@ -50,6 +52,7 @@ lazy val root = project
   )
   .settings(
     publish / skip := true,
+    crossScalaVersions := Nil,
     sonatypeCredentialHost := "s01.oss.sonatype.org",
     sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
   )
