@@ -16,10 +16,12 @@ inThisBuild(
 
 val scala212Version = "2.12.16"
 val scala213Version = "2.13.8"
+val scala3Version = "3.0.2"
 val scalaVersions =
   Seq(
     scala213Version,
-    scala212Version
+    scala212Version,
+    scala3Version
   )
 
 def subproject(name: String) = Project(
