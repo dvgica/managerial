@@ -41,7 +41,7 @@ lazy val managerialTwitterUtil =
   subproject("managerial-twitter-util")
     .dependsOn(managerial)
     .settings(
-      libraryDependencies += "com.twitter" %% "util-core" % "22.4.0" % Provided
+      libraryDependencies += "com.twitter" %% "util-core" % "22.4.0" % Provided exclude ("org.scala-lang.modules", "scala-collection-compat_3")
     )
 
 lazy val root = project
@@ -52,6 +52,7 @@ lazy val root = project
   )
   .settings(
     publish / skip := true,
+    crossScalaVersions := Nil,
     sonatypeCredentialHost := "s01.oss.sonatype.org",
     sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
   )
