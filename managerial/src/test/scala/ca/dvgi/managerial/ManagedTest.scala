@@ -152,7 +152,7 @@ class ManagedTest extends munit.FunSuite {
 
     assert(!tr.tornDown)
 
-    interceptMessage[RuntimeException](testException.getMessage) {
+    val _ = interceptMessage[RuntimeException](testException.getMessage) {
       m.build()
     }
 
@@ -175,7 +175,7 @@ class ManagedTest extends munit.FunSuite {
 
     assert(!tr.tornDown)
 
-    interceptMessage[RuntimeException](testException.getMessage) {
+    val _ = interceptMessage[RuntimeException](testException.getMessage) {
       r.teardown()
     }
 
@@ -208,7 +208,7 @@ class ManagedTest extends munit.FunSuite {
 
     val expectedMessage =
       s"Double exception while tearing down composite resource: ${testException2.getMessage}, ${testException1.getMessage}"
-    interceptMessage[TeardownDoubleException](expectedMessage) {
+    val _ = interceptMessage[TeardownDoubleException](expectedMessage) {
       r.teardown()
     }
 
@@ -237,7 +237,7 @@ class ManagedTest extends munit.FunSuite {
     val tr = new TestResource
     val m = Managed(tr)(_.teardown())
     val e = new RuntimeException("test exception")
-    interceptMessage[RuntimeException](e.getMessage) {
+    val _ = interceptMessage[RuntimeException](e.getMessage) {
       m.use(_ => throw e)
     }
     assert(tr.tornDown)
@@ -350,7 +350,7 @@ class ManagedTest extends munit.FunSuite {
 
     assert(!tr1.tornDown)
 
-    interceptMessage[RuntimeException](e.getMessage) {
+    val _ = interceptMessage[RuntimeException](e.getMessage) {
       mtrs.build()
     }
 
@@ -373,7 +373,7 @@ class ManagedTest extends munit.FunSuite {
     val expected = List(tr1, tr2)
     assertEquals(r.get, expected)
 
-    interceptMessage[RuntimeException](e.getMessage) {
+    val _ = interceptMessage[RuntimeException](e.getMessage) {
       r.teardown()
     }
 

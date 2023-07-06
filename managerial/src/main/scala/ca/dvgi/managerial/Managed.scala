@@ -58,11 +58,10 @@ trait Managed[+T] { selfT =>
     } catch (onSetupException)
 
     if (r != null) {
-      sys.addShutdownHook {
+      val _ = sys.addShutdownHook {
         try r.teardown()
         catch (onTeardownException)
       }
-      ()
     }
   }
 
