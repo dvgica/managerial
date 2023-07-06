@@ -2,7 +2,7 @@ queue_rules:
   - name: dependency-update
     conditions:
       - check-success=Build and Test (ubuntu-latest, 3.0.2, temurin@8)
-      - check-success=Build and Test (ubuntu-latest, 2.13.10, temurin@8)      
+      - check-success=Build and Test (ubuntu-latest, 2.13.11, temurin@8)      
       - check-success=Build and Test (ubuntu-latest, 2.12.17, temurin@8)
 
 pull_request_rules:
@@ -10,7 +10,7 @@ pull_request_rules:
     conditions:
       - base=main
       - check-success=Build and Test (ubuntu-latest, 3.0.2, temurin@8)      
-      - check-success=Build and Test (ubuntu-latest, 2.13.10, temurin@8)      
+      - check-success=Build and Test (ubuntu-latest, 2.13.11, temurin@8)      
       - check-success=Build and Test (ubuntu-latest, 2.12.17, temurin@8)
       - author=scala-steward
     actions:
