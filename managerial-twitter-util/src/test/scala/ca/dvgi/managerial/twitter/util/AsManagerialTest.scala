@@ -45,7 +45,7 @@ class PackageTest extends munit.FunSuite {
     assertEquals(r.get, i)
     assert(!torndown)
 
-    r.dispose()
+    val _ = r.dispose()
     assert(torndown)
   }
 }
