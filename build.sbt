@@ -16,7 +16,7 @@ inThisBuild(
 
 val scala212Version = "2.12.19"
 val scala213Version = "2.13.14"
-val scala3Version = "3.0.2"
+val scala3Version = "3.3.3"
 val scalaVersions =
   Seq(
     scala213Version,
@@ -30,7 +30,7 @@ def subproject(name: String) = Project(
 ).settings(
   scalaVersion := scala213Version,
   crossScalaVersions := scalaVersions,
-  libraryDependencies += "org.scalameta" %% "munit" % "0.7.29" % Test,
+  libraryDependencies += "org.scalameta" %% "munit" % "1.0.0" % Test,
   sonatypeCredentialHost := "s01.oss.sonatype.org",
   sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
 )
