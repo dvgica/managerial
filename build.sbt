@@ -41,7 +41,10 @@ lazy val managerialTwitterUtil =
   subproject("managerial-twitter-util")
     .dependsOn(managerial)
     .settings(
-      libraryDependencies += "com.twitter" %% "util-core" % "24.2.0" % Provided exclude ("org.scala-lang.modules", "scala-collection-compat_3")
+      libraryDependencies += "com.twitter" %% "util-core" % "24.2.0" % Provided exclude (
+        "org.scala-lang.modules",
+        "scala-collection-compat_3"
+      )
     )
 
 lazy val root = project
