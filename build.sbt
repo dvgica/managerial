@@ -30,7 +30,7 @@ def subproject(name: String) = Project(
 ).settings(
   scalaVersion := scala213Version,
   crossScalaVersions := scalaVersions,
-  libraryDependencies += "org.scalameta" %% "munit" % "1.0.2" % Test,
+  libraryDependencies += "org.scalameta" %% "munit" % "1.0.3" % Test,
   sonatypeCredentialHost := "s01.oss.sonatype.org",
   sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
 )
