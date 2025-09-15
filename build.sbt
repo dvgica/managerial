@@ -30,7 +30,7 @@ def subproject(name: String) = Project(
 ).settings(
   scalaVersion := scala213Version,
   crossScalaVersions := scalaVersions,
-  libraryDependencies += "org.scalameta" %% "munit" % "1.1.2" % Test
+  libraryDependencies += "org.scalameta" %% "munit" % "1.2.0" % Test
 )
 
 lazy val managerial = subproject("managerial")
