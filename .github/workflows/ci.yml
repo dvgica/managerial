@@ -24,7 +24,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         scala: [2.13.16, 2.12.20, 3.3.6]
-        java: [temurin@8]
+        java: [temurin@17]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
@@ -32,12 +32,12 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Java (temurin@8)
-        if: matrix.java == 'temurin@8'
+      - name: Setup Java (temurin@17)
+        if: matrix.java == 'temurin@17'
         uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: 8
+          java-version: 17
           cache: sbt
 
       - name: Setup sbt
@@ -53,7 +53,7 @@ jobs:
         run: sbt '++ ${{ matrix.scala }}; test'
 
       - name: Compress target directories
-        run: tar cf targets.tar target managerial/target managerial-twitter-util/target project/target
+        run: tar cf targets.tar target/out/jvm/scala-3.8.4/root target/out/jvm/scala-2.13.16/managerial target/out/jvm/scala-2.13.16/managerial-twitter-util project/target
 
       - name: Upload target directories
         uses: actions/upload-artifact@v7
@@ -68,8 +68,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.12.21]
-        java: [temurin@8]
+        scala: [3.8.4]
+        java: [temurin@17]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
@@ -77,12 +77,12 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Java (temurin@8)
-        if: matrix.java == 'temurin@8'
+      - name: Setup Java (temurin@17)
+        if: matrix.java == 'temurin@17'
         uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: 8
+          java-version: 17
           cache: sbt
 
       - name: Setup sbt

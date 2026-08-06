@@ -62,7 +62,7 @@ ThisBuild / githubWorkflowBuildPreamble := Seq(
     name = Some("Check formatting with scalafmt")
   )
 )
-ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
+ThisBuild / githubWorkflowTargetTags := Seq("v*")
 ThisBuild / githubWorkflowPublishTargetBranches :=
   Seq(RefPredicate.StartsWith(Ref.Tag("v")))
 
