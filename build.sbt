@@ -77,3 +77,8 @@ ThisBuild / githubWorkflowPublish := Seq(
     )
   )
 )
+
+// sbt 2 puts targets under target/out/jvm/scala-<version>/, so the generated
+// artifact upload steps embed whichever Scala version is active. That makes
+// githubWorkflowCheck fail in every cross-build job but one.
+ThisBuild / githubWorkflowArtifactUpload := false
