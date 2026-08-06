@@ -1,16 +1,16 @@
 queue_rules:
   - name: dependency-update
-    conditions:
+    merge_conditions:
       - check-success=Build and Test (ubuntu-latest, 3.3.6, temurin@8)
-      - check-success=Build and Test (ubuntu-latest, 2.13.16, temurin@8)      
+      - check-success=Build and Test (ubuntu-latest, 2.13.16, temurin@8)
       - check-success=Build and Test (ubuntu-latest, 2.12.20, temurin@8)
 
 pull_request_rules:
   - name: Merge using the merge queue
     conditions:
       - base=main
-      - check-success=Build and Test (ubuntu-latest, 3.3.6, temurin@8)      
-      - check-success=Build and Test (ubuntu-latest, 2.13.16, temurin@8)      
+      - check-success=Build and Test (ubuntu-latest, 3.3.6, temurin@8)
+      - check-success=Build and Test (ubuntu-latest, 2.13.16, temurin@8)
       - check-success=Build and Test (ubuntu-latest, 2.12.20, temurin@8)
       - author=scala-steward
     actions:
