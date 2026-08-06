@@ -14,8 +14,8 @@ inThisBuild(
   )
 )
 
-val scala212Version = "2.12.20"
-val scala213Version = "2.13.16"
+val scala212Version = "2.12.21"
+val scala213Version = "2.13.18"
 val scala3Version = "3.3.8"
 val scalaVersions =
   Seq(
@@ -30,7 +30,7 @@ def subproject(name: String) = Project(
 ).settings(
   scalaVersion := scala213Version,
   crossScalaVersions := scalaVersions,
-  libraryDependencies += "org.scalameta" %% "munit" % "1.3.2" % Test
+  libraryDependencies += "org.scalameta" %% "munit" % "1.3.4" % Test
 )
 
 lazy val managerial = subproject("managerial")
