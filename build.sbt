@@ -1,14 +1,14 @@
 inThisBuild(
   List(
     organization := "ca.dvgi",
-    homepage := Some(url("https://github.com/dvgica/managerial")),
-    licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
+    homepage := Some(uri("https://github.com/dvgica/managerial")),
+    licenses := List("Apache-2.0" -> uri("http://www.apache.org/licenses/LICENSE-2.0")),
     developers := List(
       Developer(
         "dvgica",
         "David van Geest",
         "david.vangeest@gmail.com",
-        url("http://dvgi.ca")
+        uri("http://dvgi.ca")
       )
     )
   )
@@ -39,10 +39,8 @@ lazy val managerialTwitterUtil =
   subproject("managerial-twitter-util")
     .dependsOn(managerial)
     .settings(
-      libraryDependencies += "com.twitter" %% "util-core" % "24.2.0" % Provided exclude (
-        "org.scala-lang.modules",
-        "scala-collection-compat_3"
-      )
+      libraryDependencies += ("com.twitter" %% "util-core" % "24.2.0" % Provided)
+        .exclude("org.scala-lang.modules", "scala-collection-compat_3")
     )
 
 lazy val root = project
