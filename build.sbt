@@ -1,14 +1,14 @@
 inThisBuild(
   List(
     organization := "ca.dvgi",
-    homepage := Some(url("https://github.com/dvgica/managerial")),
-    licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
+    homepage := Some(uri("https://github.com/dvgica/managerial")),
+    licenses := List("Apache-2.0" -> uri("http://www.apache.org/licenses/LICENSE-2.0")),
     developers := List(
       Developer(
         "dvgica",
         "David van Geest",
         "david.vangeest@gmail.com",
-        url("http://dvgi.ca")
+        uri("http://dvgi.ca")
       )
     )
   )
@@ -39,10 +39,8 @@ lazy val managerialTwitterUtil =
   subproject("managerial-twitter-util")
     .dependsOn(managerial)
     .settings(
-      libraryDependencies += "com.twitter" %% "util-core" % "24.2.0" % Provided exclude (
-        "org.scala-lang.modules",
-        "scala-collection-compat_3"
-      )
+      libraryDependencies += ("com.twitter" %% "util-core" % "24.2.0" % Provided)
+        .exclude("org.scala-lang.modules", "scala-collection-compat_3")
     )
 
 lazy val root = project
@@ -57,14 +55,14 @@ lazy val root = project
   )
 
 ThisBuild / crossScalaVersions := scalaVersions
-ThisBuild / githubWorkflowJavaVersions := Seq(JavaSpec.temurin("8"))
+ThisBuild / githubWorkflowJavaVersions := Seq(JavaSpec.temurin("17"))
 ThisBuild / githubWorkflowBuildPreamble := Seq(
   WorkflowStep.Sbt(
     List("scalafmtCheckAll", "scalafmtSbtCheck"),
     name = Some("Check formatting with scalafmt")
   )
 )
-ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
+ThisBuild / githubWorkflowTargetTags := Seq("v*")
 ThisBuild / githubWorkflowPublishTargetBranches :=
   Seq(RefPredicate.StartsWith(Ref.Tag("v")))
 
@@ -79,3 +77,8 @@ ThisBuild / githubWorkflowPublish := Seq(
     )
   )
 )
+
+// sbt 2 puts targets under target/out/jvm/scala-<version>/, so the generated
+// artifact upload steps embed whichever Scala version is active. That makes
+// githubWorkflowCheck fail in every cross-build job but one.
+ThisBuild / githubWorkflowArtifactUpload := false
