@@ -50,7 +50,7 @@ jobs:
         run: sbt '++ ${{ matrix.scala }}; githubWorkflowCheck'
 
       - name: Build project
-        run: sbt '++ ${{ matrix.scala }}; test'
+        run: sbt '++ ${{ matrix.scala }}; testFull'
 
   publish:
     name: Publish Artifacts
