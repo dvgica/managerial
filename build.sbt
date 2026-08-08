@@ -82,3 +82,11 @@ ThisBuild / githubWorkflowPublish := Seq(
 // artifact upload steps embed whichever Scala version is active. That makes
 // githubWorkflowCheck fail in every cross-build job but one.
 ThisBuild / githubWorkflowArtifactUpload := false
+
+// In sbt 2, `test` only runs tests that failed before, were not run, or whose
+// dependencies changed. Its results are cached in ~/.cache/sbt, which CI
+// restores across runs, so a job can report success having run nothing.
+// `testFull` runs every test.
+ThisBuild / githubWorkflowBuild := Seq(
+  WorkflowStep.Sbt(List("testFull"), name = Some("Build project"))
+)
