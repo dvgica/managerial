@@ -90,3 +90,31 @@ ThisBuild / githubWorkflowArtifactUpload := false
 ThisBuild / githubWorkflowBuild := Seq(
   WorkflowStep.Sbt(List("testFull"), name = Some("Build project"))
 )
+
+// Mergify and branch protection match on check names, which for a matrix job
+// embed the Scala version. This job depends on the matrix as a whole, so its
+// check name is stable, and needs.build.result is only "success" when every
+// leg passed. always() makes it report a conclusion even when the matrix
+// fails, rather than being skipped.
+ThisBuild / githubWorkflowAddedJobs := Seq(
+  WorkflowJob(
+    id = "build-success",
+    name = "Build and Test Success",
+    steps = List(
+      WorkflowStep.Run(
+        List("exit 1"),
+        name = Some("Fail if the build matrix did not succeed"),
+        cond = Some("needs.build.result != 'success'")
+      )
+    ),
+    cond = Some("always()"),
+    needs = List("build"),
+    // sbt-github-actions always emits an os/scala/java matrix, and GitHub
+    // appends the matrix values to the check name. Empty dimensions produce a
+    // workflow GitHub rejects, so the scala dimension is a constant rather
+    // than a real version: this job builds nothing and never reads it, and it
+    // keeps the check name stable as crossScalaVersions changes.
+    scalas = List("all"),
+    javas = List(JavaSpec.temurin("17"))
+  )
+)

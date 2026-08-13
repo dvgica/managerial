@@ -85,3 +85,18 @@ jobs:
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
         run: sbt ci-release
+
+  build-success:
+    name: Build and Test Success
+    needs: [build]
+    if: always()
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        scala: [all]
+        java: [temurin@17]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Fail if the build matrix did not succeed
+        if: needs.build.result != 'success'
+        run: exit 1
