@@ -17,3 +17,6 @@
 **/metals.sbt
 
 Main.scala
+
+# sbt 2 emits this alongside build.sbt
+build.sbt.semanticdb
