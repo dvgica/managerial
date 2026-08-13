@@ -62,7 +62,17 @@ ThisBuild / githubWorkflowBuildPreamble := Seq(
     name = Some("Check formatting with scalafmt")
   )
 )
+// One setting drives both the pull_request and push triggers. Left at the
+// default of "**", a branch in this repo with an open PR fires both and every
+// job runs twice. For pull_request this filters on the base branch, so "main"
+// still covers every PR; for push it means only main and the release tags.
+ThisBuild / githubWorkflowTargetBranches := Seq("main")
 ThisBuild / githubWorkflowTargetTags := Seq("v*")
+
+// The generated Clean workflow deletes build artifacts, and this build stopped
+// uploading any when githubWorkflowArtifactUpload was disabled. It is rendered
+// as a bare `on: push`, so it was also running on every branch.
+ThisBuild / githubWorkflowIncludeClean := false
 ThisBuild / githubWorkflowPublishTargetBranches :=
   Seq(RefPredicate.StartsWith(Ref.Tag("v")))
 
